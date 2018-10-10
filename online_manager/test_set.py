@@ -10,11 +10,14 @@ class TestSet:
 
     def __init__(self):
         self.clear_all_objects()
-        users = self.create_all_users()
 
     def clear_all_objects(self) -> None:
         User.objects.filter(is_staff=False, is_superuser=False).delete()
         Task.objects.all().delete()
+
+    def generate_test_set(self):
+        users = self.create_all_users()
+        self.create_all_tasks(users)
 
     def create_all_users(self) -> List[User]:
         users = list()
@@ -37,3 +40,9 @@ class TestSet:
 
     def _create_task(self, name: str, owner: User, is_done: bool)->None:
         Task(name=name, owner=owner, is_done=is_done).save()
+
+
+if __name__ == '__main__':
+    testset = TestSet()
+    testset.generate_test_set()
+

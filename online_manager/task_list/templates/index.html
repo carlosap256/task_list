@@ -18,7 +18,7 @@
         <div class="card-body">
 
             <ul class="list-group">
-                {% for task in tasks %}
+                {% for task in tasks.mine_pending %}
                 <li class="list-group-item">{{task}}</li>
                 {% endfor %}
             </ul>
