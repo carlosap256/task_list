@@ -15,10 +15,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.conf.urls import url
+
 from task_list.views import Index
+from task_list.task_crud import TaskCrud
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('django.contrib.auth.urls')),
-    path('', Index.as_view(), name='index')
+    path('', Index.as_view(), name='index'),
+    url(r'^task_crud/(?P<method>create|delete|done|undone)/',  TaskCrud.as_view(), name='task_crud'),
 ]

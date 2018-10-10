@@ -1,7 +1,27 @@
+<script>
+    $(document).ready(function() {
+        $('#new_task').click(function(){
+
+           $.post( "/task_crud/create/", {csrfmiddlewaretoken: '{{ csrf_token }}'}, function() {
+            })
+              .done(function(result) {
+
+              })
+              .fail(function(result) {
+                console.error(result.responseText)
+              })
+              .always(function(result) {
+
+              });
+        });
+    });
+</script>
+
+
 <div class="container">
     <div class="row">
         <div class="offset-md-10">
-            <div class="btn btn-outline-primary">
+            <div id="new_task" class="btn btn-outline-primary">
                 <span><i class="fas fa-plus"></i>  New Task</span>
             </div>
         </div>

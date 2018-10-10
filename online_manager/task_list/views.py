@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView
 from django.db.models.query import QuerySet
-from django.contrib.auth.decorators import login_required
 
+from task_list.mixin import LoginRequiredMixin
 from task_list.models import Task, User
 
 
@@ -47,7 +47,7 @@ class FilteredTasks:
         return [task.to_dict() for task in tasks]
 
 
-class Index(TemplateView):
+class Index(LoginRequiredMixin, TemplateView):
 
     def get(self, request, *args, **kwargs):
         tasks = FilteredTasks(request.user)

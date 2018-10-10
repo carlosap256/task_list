@@ -1,5 +1,36 @@
+<script>
+    function get_action_name(component){
+        var action = $(component).attr('action');
+        return action;
+    }
+    function get_task_id(component){
+        var action = $(component).attr('task_id');
+        return action;
+    }
 
-<div class="row">
+    $(document).ready(function() {
+        $('.task_action').click(function(){
+
+            var action_name = get_action_name($(this));
+            var task_id = get_task_id($(this));
+
+           $.post( "/task_crud/"+action_name+"/", {task_id: task_id, csrfmiddlewaretoken: '{{ csrf_token }}'}, function() {
+            })
+              .done(function(result) {
+
+              })
+              .fail(function(result) {
+                console.error(result.responseText)
+              })
+              .always(function(result) {
+
+              });
+        });
+    });
+
+</script>
+
+<div class="row" task_id="{{single_task.id}}">
     <div class="col-2">
       {{single_task.owner.username}}
     </div>
@@ -8,13 +39,13 @@
     </div>
     {% if single_task.owner.username == user.username %}
         <div class="col-1">
-            <i class="fas fa-trash-alt"></i>
+            <i action="delete" task_id="{{single_task.id}}" class="btn task_action fas fa-trash-alt"></i>
         </div>
         <div class="col-1">
             {% if single_task.is_done %}
-                <i class="fas fa-redo"></i>
+                <i action="undone" task_id="{{single_task.id}}" class="btn task_action fas fa-redo"></i>
             {% else %}
-                <i class="fas fa-check"></i>
+                <i action="done" task_id="{{single_task.id}}" class="btn task_action fas fa-check"></i>
             {% endif %}
         </div>
     {% endif %}
