@@ -1,23 +1,22 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import User
 
 
-class User(AbstractUser):
-
-    def to_dict(self):
-        return{
+User.add_to_class(
+        'to_dict',
+        lambda self: {
             "username": self.username,
-        }
+        })
 
 
 class Task(models.Model):
     name = models.CharField(default='', max_length=300, null=False)
     owner = models.ForeignKey(User, on_delete=models.DO_NOTHING)
-    done = models.BooleanField(default=False)
+    is_done = models.BooleanField(default=False)
 
     def to_dict(self):
         return {
             'name': self.name,
             'owner': self.owner.to_dict(),
-            'done': self.done,
+            'is_done': self.is_done,
         }

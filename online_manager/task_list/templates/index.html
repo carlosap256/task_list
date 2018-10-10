@@ -5,14 +5,26 @@
 {% block content %}
 
 <div class="container">
-    <ul class="nav justify-content-center">
-        <li class="nav-item">
-            <a class="nav-link active" href="#">Task List</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#">Users</a>
-        </li>
-    </ul>
+    <div class="card pt-5">
+        <ul class="nav justify-content-center">
+            <li class="nav-item">
+                <a class="nav-link active" href="#">Pending</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Done</a>
+            </li>
+        </ul>
+
+        <div class="card-body">
+
+            <ul class="list-group">
+                {% for task in tasks %}
+                <li class="list-group-item">{{task}}</li>
+                {% endfor %}
+            </ul>
+
+        </div>
+    </div>
 </div>
 
 {% endblock content %}
