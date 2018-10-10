@@ -6,6 +6,7 @@
 
 <div class="container">
     <div class="card pt-5">
+        <i class="fas fa-plus"></i>
         <ul class="nav justify-content-center">
             <li class="nav-item">
                 <a class="nav-link active" href="#">Pending</a>
@@ -17,11 +18,12 @@
 
         <div class="card-body">
 
-            <ul class="list-group">
-                {% for task in tasks.mine_pending %}
-                <li class="list-group-item">{{task}}</li>
-                {% endfor %}
-            </ul>
+            <div class="pt-5">
+            {% include "partials/task_list_section.html" with section_owner_title='My tasks' task_list=filtered_tasks.mine_pending %}
+            </div>
+            <div class="pt-5">
+            {% include "partials/task_list_section.html" with section_owner_title="Other's tasks" task_list=filtered_tasks.others_pending %}
+            </div>
 
         </div>
     </div>

@@ -1,5 +1,3 @@
-from typing import List, Dict
-
 from django.shortcuts import render
 from django.views.generic import TemplateView
 from django.db.models.query import QuerySet
@@ -8,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 from task_list.models import Task, User
 
 
-class TaskList:
+class FilteredTasks:
     pending_by_user: QuerySet
     pending_by_others: QuerySet
     done_by_user: QuerySet
@@ -52,8 +50,8 @@ class TaskList:
 class Index(TemplateView):
 
     def get(self, request, *args, **kwargs):
-        tasks = TaskList(request.user)
-        return render(request, 'index.html', {'tasks': tasks.to_dict()})
+        tasks = FilteredTasks(request.user)
+        return render(request, 'index.html', {'filtered_tasks': tasks.to_dict()})
 
     def post(self, request, *args, **kwargs):
         pass

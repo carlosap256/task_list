@@ -1,0 +1,14 @@
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">{{section_owner_title}}</h5>
+        <div class="card-text">
+            <ul class="list-group">
+                {% for task in task_list %}
+                <li class="list-group-item">
+                    {% include "partials/single_task.html" with single_task=task %}
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
