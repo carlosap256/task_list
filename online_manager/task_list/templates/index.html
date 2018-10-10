@@ -6,26 +6,44 @@
 
 <div class="container">
     <div class="card pt-5">
-        <i class="fas fa-plus"></i>
-        <ul class="nav justify-content-center">
+
+
+
+        <ul class="nav nav-tabs">
             <li class="nav-item">
-                <a class="nav-link active" href="#">Pending</a>
+                <a class="nav-link active" id="pending-tab" data-toggle="tab" href="#pending" role="tab"
+                   aria-controls="pending" aria-selected="true">Pending tasks</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Done</a>
+                <a class="nav-link" id="done-tab" data-toggle="tab" href="#done" role="tab" aria-controls="done"
+                   aria-selected="false">Done Tasks</a>
             </li>
         </ul>
 
-        <div class="card-body">
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="pending" role="tabpanel" aria-labelledby="pending-tab">
+                <div class="card-body">
+                    <div class="pt-5">
+                        {% include "partials/task_list_section.html" with section_owner_title='My tasks' task_list=filtered_tasks.mine_pending %}
+                    </div>
+                    <div class="pt-5">
+                        {% include "partials/task_list_section.html" with section_owner_title="Other's tasks" task_list=filtered_tasks.others_pending %}
+                    </div>
+                </div>
 
-            <div class="pt-5">
-            {% include "partials/task_list_section.html" with section_owner_title='My tasks' task_list=filtered_tasks.mine_pending %}
             </div>
-            <div class="pt-5">
-            {% include "partials/task_list_section.html" with section_owner_title="Other's tasks" task_list=filtered_tasks.others_pending %}
+            <div class="tab-pane fade" id="done" role="tabpanel" aria-labelledby="done-tab">
+                <div class="card-body">
+                    <div class="pt-5">
+                        {% include "partials/task_list_section.html" with section_owner_title='My tasks' task_list=filtered_tasks.mine_done %}
+                    </div>
+                    <div class="pt-5">
+                        {% include "partials/task_list_section.html" with section_owner_title="Other's tasks" task_list=filtered_tasks.others_done %}
+                    </div>
+                </div>
             </div>
-
         </div>
+
     </div>
 </div>
 
