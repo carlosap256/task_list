@@ -28,26 +28,32 @@
         });
     });
 
+
+
 </script>
 
 <div class="row" task_id="{{single_task.id}}">
     <div class="col-2">
-      {{single_task.owner.username}}
+        {{single_task.owner.username}}
     </div>
+    {% if single_task.owner.username == user.username %}
     <div class="col-8">
         {{single_task.name}}
     </div>
-    {% if single_task.owner.username == user.username %}
-        <div class="col-1">
-            <i action="delete" task_id="{{single_task.id}}" class="btn task_action fas fa-trash-alt"></i>
-        </div>
-        <div class="col-1">
-            {% if single_task.is_done %}
-                <i action="undone" task_id="{{single_task.id}}" class="btn task_action fas fa-redo"></i>
-            {% else %}
-                <i action="done" task_id="{{single_task.id}}" class="btn task_action fas fa-check"></i>
-            {% endif %}
-        </div>
+    <div class="col-1">
+        <i action="delete" task_id="{{single_task.id}}" class="btn task_action fas fa-trash-alt"></i>
+    </div>
+    {% else %}
+    <div class="col-9">
+        {{single_task.name}}
+    </div>
     {% endif %}
+    <div class="col-1">
+        {% if single_task.is_done %}
+        <i action="undone" task_id="{{single_task.id}}" class="btn task_action far fa-check-square"></i>
+        {% else %}
+        <i action="done" task_id="{{single_task.id}}" class="btn task_action far fa-square"></i>
+        {% endif %}
+    </div>
 </div>
 
