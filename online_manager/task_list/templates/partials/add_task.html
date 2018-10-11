@@ -1,11 +1,20 @@
 <script>
     $(document).ready(function() {
-        $('#new_task').click(function(){
 
-           $.post( "/task_crud/create/", {csrfmiddlewaretoken: '{{ csrf_token }}'}, function() {
+        function task_name_not_empty(){
+            return get_new_task_name() != ''
+        }
+
+        function get_new_task_name(){
+            return $('#new_task_name').val();
+        }
+
+        function post_new_task(){
+            var task_name = get_new_task_name();
+            $.post( "/task_crud/create/", {task_name: task_name,csrfmiddlewaretoken: '{{ csrf_token }}'}, function() {
             })
               .done(function(result) {
-
+                window.location.reload(true);
               })
               .fail(function(result) {
                 console.error(result.responseText)
@@ -13,17 +22,27 @@
               .always(function(result) {
 
               });
+        }
+
+        $('#new_task').click(function(){
+            if(task_name_not_empty()){
+
+                post_new_task();
+            }else{
+                $('#new_task_name').focus();
+            }
+
         });
     });
 </script>
 
 
-<div class="container">
-    <div class="row">
-        <div class="offset-md-10">
-            <div id="new_task" class="btn btn-outline-primary">
-                <span><i class="fas fa-plus"></i>  New Task</span>
-            </div>
-        </div>
+
+<nav class="navbar navbar-light bg-light">
+  <form class="input-group input-group-default">
+    <input id="new_task_name" class="form-control input-default col-lg-12" placeholder="Add task" aria-label="Add task">
+      <div id="new_task" class="btn btn-outline-primary">
+        <span><i class="fas fa-plus"></i>  Submit</span>
     </div>
-</div>
+  </form>
+</nav>

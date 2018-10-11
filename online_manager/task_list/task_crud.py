@@ -1,13 +1,13 @@
 from django.views.generic import TemplateView
 from django.core.exceptions import ObjectDoesNotExist
-from django.shortcuts import render, render_to_response, get_object_or_404
-from django.http import HttpResponse, HttpResponseNotFound, HttpResponseBadRequest, HttpResponseForbidden
-from django.utils import timezone
+from django.shortcuts import render, render_to_response
+from django.http import HttpResponseNotFound, HttpResponseBadRequest, HttpResponseForbidden, HttpResponse
 
+from task_list.mixin import LoginRequiredMixin
 from task_list.models import Task, User
 
 
-class TaskCrud(TemplateView):
+class TaskCrud(LoginRequiredMixin, TemplateView):
     def get(self, request, *args, **kwargs):
         return HttpResponseNotFound('<h1>Page not found</h1>')
 
@@ -16,7 +16,8 @@ class TaskCrud(TemplateView):
         method = self._get_request_method(kwargs)
 
         if method == 'create':
-            self._create_task(user, 'Test task')
+            task_name = self._get_task_name(request)
+            self._create_task(user, task_name)
         else:
             task = self._get_edited_task(request)
 
@@ -50,8 +51,14 @@ class TaskCrud(TemplateView):
                 raise HttpResponseNotFound
         raise HttpResponseBadRequest
 
+    def _get_task_name(self, request) -> str:
+        if 'task_name' in request.POST:
+            return request.POST['task_name']
+        else:
+            raise HttpResponseBadRequest
+
     def _create_task(self, user: User, name: str):
-        pass
+        Task(name=name, owner=user, is_done=False).save()
 
     def _delete_task(self, task: Task, user: User):
         if task.can_delete(user):
