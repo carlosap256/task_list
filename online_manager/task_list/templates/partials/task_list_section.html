@@ -2,13 +2,22 @@
     <div class="card-body">
         <h5 class="card-title">{{section_owner_title}}</h5>
         <div class="card-text">
-            <ul class="list-group">
+            <table class="table table-hover">
+                <thead>
+                <tr class="d-flex">
+                    <th class="col-2">Owner</th>
+                    <th class="col-6">Description</th>
+                    <th class="col-1">Delete</th>
+                    <th class="col-1">Status</th>
+                    <th class="col-2">Done by</th>
+                </tr>
+                </thead>
+                <tbody>
                 {% for task in task_list %}
-                <li class="list-group-item">
                     {% include "partials/single_task.html" with single_task=task %}
-                </li>
                 {% endfor %}
-            </ul>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>

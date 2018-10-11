@@ -17,7 +17,7 @@
            $.post( "/task_crud/"+action_name+"/", {task_id: task_id, csrfmiddlewaretoken: '{{ csrf_token }}'}, function() {
             })
               .done(function(result) {
-
+                window.location.reload(true);
               })
               .fail(function(result) {
                 console.error(result.responseText)
@@ -27,33 +27,34 @@
               });
         });
     });
-
-
-
 </script>
 
-<div class="row" task_id="{{single_task.id}}">
-    <div class="col-2">
+<tr task_id="{{single_task.id}}" class="d-flex">
+    <td class="col-2">
         {{single_task.owner.username}}
-    </div>
-    {% if single_task.owner.username == user.username %}
-    <div class="col-8">
+    </td>
+    <td class="col-6">
         {{single_task.name}}
-    </div>
-    <div class="col-1">
+    </td>
+    <td class="col-1">
+        {% if single_task.owner.username == user.username %}
         <i action="delete" task_id="{{single_task.id}}" class="btn task_action fas fa-trash-alt"></i>
-    </div>
-    {% else %}
-    <div class="col-9">
-        {{single_task.name}}
-    </div>
-    {% endif %}
-    <div class="col-1">
-        {% if single_task.is_done %}
-        <i action="undone" task_id="{{single_task.id}}" class="btn task_action far fa-check-square"></i>
         {% else %}
-        <i action="done" task_id="{{single_task.id}}" class="btn task_action far fa-square"></i>
         {% endif %}
-    </div>
-</div>
+    </td>
+    {% if single_task.is_done %}
+    <td class="col-1">
+        <i action="undone" task_id="{{single_task.id}}" class="btn task_action far fa-check-square"></i>
+    </td>
+    <td class="col-2">
+        {{single_task.marked_done_by.username}}
+    </td>
+    {% else %}
+    <td class="col-1">
+        <i action="done" task_id="{{single_task.id}}" class="btn task_action far fa-square"></i>
+    </td>
+    <td class="col-2">
+    </td>
+    {% endif %}
+</tr>
 
