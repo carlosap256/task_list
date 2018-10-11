@@ -24,5 +24,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('django.contrib.auth.urls')),
     path('', Index.as_view(), name='index'),
-    url(r'^task_crud/(?P<method>create|delete|done|undone)/',  TaskCrud.as_view(), name='task_crud'),
+    url(r'^task_crud/(?P<method>create|edit|delete|done|undone)/',  TaskCrud.as_view(), name='task_crud'),
 ]

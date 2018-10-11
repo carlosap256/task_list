@@ -19,8 +19,12 @@ class TaskCrud(LoginRequiredMixin, TemplateView):
             task_name = self._get_task_name(request)
             self._create_task(user, task_name)
         else:
-            task = self._get_edited_task(request)
+            if method == 'edit':
+                task_name = self._get_task_name(request)
+                task_id = self._get_task_id(request)
+                self._edit_task(task_id, task_name, user)
 
+            task = self._get_edited_task(request)
             if method == 'delete':
                 self._delete_task(task, user)
             elif method == 'done':
@@ -36,19 +40,22 @@ class TaskCrud(LoginRequiredMixin, TemplateView):
         return request.user
 
     def _get_request_method(self, kwargs):
-        valid_methods = ['create', 'delete', 'done', 'undone']
+        valid_methods = ['create', 'edit', 'delete', 'done', 'undone']
         method = kwargs.get('method', '')
         if method not in valid_methods:
             raise HttpResponseBadRequest
         return method
 
     def _get_edited_task(self, request) -> Task:
+        task_id = self._get_task_id(request)
+        try:
+            return Task.objects.get(id=task_id)
+        except ObjectDoesNotExist:
+            raise HttpResponseNotFound
+
+    def _get_task_id(self, request) -> int:
         if 'task_id' in request.POST:
-            task_id = request.POST['task_id']
-            try:
-                return Task.objects.get(id=task_id)
-            except ObjectDoesNotExist:
-                raise HttpResponseNotFound
+            return request.POST['task_id']
         raise HttpResponseBadRequest
 
     def _get_task_name(self, request) -> str:
@@ -60,8 +67,14 @@ class TaskCrud(LoginRequiredMixin, TemplateView):
     def _create_task(self, user: User, name: str):
         Task(name=name, owner=user, is_done=False).save()
 
+    def _edit_task(self, task_id: int, task_name: str, user: User):
+        task = Task.objects.get(id=task_id)
+        if task.can_modify(user):
+            task.name = task_name
+            task.save()
+
     def _delete_task(self, task: Task, user: User):
-        if task.can_delete(user):
+        if task.can_modify(user):
             task.delete()
         else:
             raise HttpResponseForbidden

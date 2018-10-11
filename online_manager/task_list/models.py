@@ -23,5 +23,5 @@ class Task(models.Model):
             'marked_done_by': self.marked_done_by.to_dict() if self.marked_done_by else ''
         }
 
-    def can_delete(self, user:User):
+    def can_modify(self, user:User):
         return self.owner.id == user.id

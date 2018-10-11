@@ -1,59 +1,36 @@
-<script>
-    function get_action_name(component){
-        var action = $(component).attr('action');
-        return action;
-    }
-    function get_task_id(component){
-        var action = $(component).attr('task_id');
-        return action;
-    }
 
-    $(document).ready(function() {
-        $('.task_action').click(function(){
-
-            var action_name = get_action_name($(this));
-            var task_id = get_task_id($(this));
-
-           $.post( "/task_crud/"+action_name+"/", {task_id: task_id, csrfmiddlewaretoken: '{{ csrf_token }}'}, function() {
-            })
-              .done(function(result) {
-                window.location.reload(true);
-              })
-              .fail(function(result) {
-                console.error(result.responseText)
-              })
-              .always(function(result) {
-
-              });
-        });
-    });
-</script>
 
 <tr task_id="{{single_task.id}}" class="d-flex">
-    <td class="col-2">
+    <td class="col-1">
         {{single_task.owner.username}}
     </td>
-    <td class="col-6">
-        {{single_task.name}}
+    <td class="col-7">
+        {% include "partials/inline_edit_task.html" with task_name=single_task.name task_id=single_task.id %}
     </td>
-    <td class="col-1">
-        {% if single_task.owner.username == user.username %}
-        <i action="delete" task_id="{{single_task.id}}" class="btn task_action fas fa-trash-alt"></i>
-        {% else %}
-        {% endif %}
-    </td>
+    {% if single_task.owner.username == user.username %}
+        <td class="col-1">
+            <i action="delete" task_id="{{single_task.id}}" class="btn task_action fas fa-trash-alt"></i>
+        </td>
+        <td class="col-1">
+            <i action="edit" task_id="{{single_task.id}}" class="btn task_action far fa-edit"></i>
+        </td>
+    {% else %}
+        <td class="col-1"></td>
+        <td class="col-1"></td>
+    {% endif %}
+
     {% if single_task.is_done %}
     <td class="col-1">
         <i action="undone" task_id="{{single_task.id}}" class="btn task_action far fa-check-square"></i>
     </td>
-    <td class="col-2">
+    <td class="col-1">
         {{single_task.marked_done_by.username}}
     </td>
     {% else %}
     <td class="col-1">
         <i action="done" task_id="{{single_task.id}}" class="btn task_action far fa-square"></i>
     </td>
-    <td class="col-2">
+    <td class="col-1">
     </td>
     {% endif %}
 </tr>

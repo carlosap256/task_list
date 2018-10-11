@@ -4,6 +4,37 @@
 
 {% block content %}
 
+<script>
+    function get_action_name(component){
+        var action = $(component).attr('action');
+        return action;
+    }
+    function get_task_id(component){
+        var action = $(component).attr('task_id');
+        return action;
+    }
+
+    $(document).ready(function() {
+        $('.task_action').click(function(){
+
+            var action_name = get_action_name($(this));
+            var task_id = get_task_id($(this));
+
+           $.post( "/task_crud/"+action_name+"/", {task_id: task_id, csrfmiddlewaretoken: '{{ csrf_token }}'}, function() {
+            })
+              .done(function(result) {
+                window.location.reload(true);
+              })
+              .fail(function(result) {
+                console.error(result.responseText)
+              })
+              .always(function(result) {
+
+              });
+        });
+    });
+</script>
+
 <div class="container">
     <div class="card pt-5">
         {% include "partials/add_task.html" %}
