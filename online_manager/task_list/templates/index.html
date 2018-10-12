@@ -4,7 +4,7 @@
 
 {% block content %}
 
-<script>
+<script language="JavaScript">
     function get_action_name(component){
         var action = $(component).attr('action');
         return action;
@@ -12,6 +12,14 @@
     function get_task_id(component){
         var action = $(component).attr('task_id');
         return action;
+    }
+    function get_task_parent_row(component){
+
+    }
+
+    function get_task_name(column_component){
+        var task_parent = $(column_component).closest('tr');
+        return $(task_parent).find('.task_name').text();
     }
 
     $(document).ready(function() {
@@ -32,6 +40,21 @@
 
               });
         });
+
+        $(".edit_task_action").click(function(){
+            var task_id = get_task_id($(this));
+            var name = get_task_name(this);
+
+            $('#modal_edit_window').modal('toggle');
+            $('#modal_task_id').val(task_id);
+            $('#modal_edit_input').val(name);
+
+        });
+
+        $('#modal_edit_window').on('shown.bs.modal', function () {
+          $('#modal_edit_input').trigger('focus')
+        });
+
     });
 </script>
 
@@ -53,5 +76,6 @@
     </div>
 </div>
 
+{% include "partials/modal_edit.html" %}
 
 {% endblock content %}

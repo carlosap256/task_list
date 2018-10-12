@@ -1,0 +1,55 @@
+<script language="JavaScript">
+
+function submit_task_edition(){
+
+            var task_id = $('#modal_task_id').val();
+            var task_name = $('#modal_edit_input').val();
+
+           $.post( "/task_crud/edit/", {task_id: task_id, task_name: task_name, csrfmiddlewaretoken: '{{ csrf_token }}'}, function() {
+            })
+              .done(function(result) {
+                window.location.reload(true);
+              })
+              .fail(function(result) {
+                console.error(result.responseText)
+              })
+              .always(function(result) {
+
+              });
+  }
+
+    $(document).ready(function() {
+        $('#modal_button').click(function(){
+            submit_task_edition();
+        });
+        $('#modal_edit_input').keypress(function(e) {
+            if(e.which == 13) {
+                submit_task_edition();
+            }
+        });
+    });
+</script>
+
+<div id="modal_edit_window" class="modal" tabindex="-1" role="dialog" style="display: none;">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Edit task</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Description</p>
+          <form class="input-group input-group-default">
+            <input id="modal_task_id" type="hidden">
+            <input id="modal_edit_input" class="form-control input-default col-lg-12">
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button id="modal_button" type="button" class="btn btn-primary">Save changes</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

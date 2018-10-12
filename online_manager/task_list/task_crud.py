@@ -19,13 +19,11 @@ class TaskCrud(LoginRequiredMixin, TemplateView):
             task_name = self._get_task_name(request)
             self._create_task(user, task_name)
         else:
+            task = self._get_edited_task(request)
             if method == 'edit':
                 task_name = self._get_task_name(request)
-                task_id = self._get_task_id(request)
-                self._edit_task(task_id, task_name, user)
-
-            task = self._get_edited_task(request)
-            if method == 'delete':
+                self._edit_task(task.id, task_name, user)
+            elif method == 'delete':
                 self._delete_task(task, user)
             elif method == 'done':
                 self._mark_as_done(task, user)

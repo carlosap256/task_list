@@ -5,14 +5,14 @@
         {{single_task.owner.username}}
     </td>
     <td class="col-7">
-        {% include "partials/inline_edit_task.html" with task_name=single_task.name task_id=single_task.id %}
+        <span class="task_name">{{single_task.name}}</span>
     </td>
     {% if single_task.owner.username == user.username %}
         <td class="col-1">
             <i action="delete" task_id="{{single_task.id}}" class="btn task_action fas fa-trash-alt"></i>
         </td>
         <td class="col-1">
-            <i action="edit" task_id="{{single_task.id}}" class="btn task_action far fa-edit"></i>
+            <i action="edit" task_id="{{single_task.id}}" class="btn edit_task_action far fa-edit"></i>
         </td>
     {% else %}
         <td class="col-1"></td>
