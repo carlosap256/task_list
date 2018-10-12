@@ -1,4 +1,10 @@
 
+# Task List
+
+This example project contains an Django App to manage a Task list for several users.
+
+
+
 ## Install virtual environment
 For easy dependency management, install virtualenv and pip
 ```
