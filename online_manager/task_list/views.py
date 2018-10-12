@@ -1,3 +1,5 @@
+from typing import Dict, List
+
 from django.shortcuts import render
 from django.views.generic import TemplateView
 from django.db.models.query import QuerySet
@@ -26,12 +28,12 @@ class FilteredTasks:
     def _get_tasks_by_others(self):
         self.tasks_by_others = Task.objects.exclude(owner=self.user)
 
-    def to_dict(self):
+    def to_dict(self) -> Dict[str, List[dict]]:
         return {'my_tasks': self._query_to_dict(self.tasks_by_user),
                 'others_tasks': self._query_to_dict(self.tasks_by_others),
                 }
 
-    def _query_to_dict(self, tasks: QuerySet):
+    def _query_to_dict(self, tasks: QuerySet) -> List[dict]:
         return [task.to_dict() for task in tasks]
 
 

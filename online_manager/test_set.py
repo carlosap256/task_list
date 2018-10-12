@@ -39,7 +39,10 @@ class TestSet:
             self._create_task(name, owner, is_done)
 
     def _create_task(self, name: str, owner: User, is_done: bool)->None:
-        Task(name=name, owner=owner, is_done=is_done).save()
+        if is_done:
+            Task(name=name, owner=owner, is_done=True, marked_done_by=owner).save()
+        else:
+            Task(name=name, owner=owner, is_done=False).save()
 
 
 if __name__ == '__main__':

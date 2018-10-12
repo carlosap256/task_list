@@ -1,13 +1,15 @@
 from django.views.generic import TemplateView
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render, render_to_response
-from django.http import HttpResponseNotFound, HttpResponseBadRequest, HttpResponseForbidden, HttpResponse
+from django.http import HttpResponseNotFound, HttpResponseBadRequest, HttpResponseForbidden, HttpResponse, Http404
 
 from task_list.mixin import LoginRequiredMixin
 from task_list.models import Task, User
 
 
 class TaskCrud(LoginRequiredMixin, TemplateView):
+    valid_methods = ['create', 'edit', 'delete', 'done', 'undone']
+
     def get(self, request, *args, **kwargs):
         return HttpResponseNotFound('<h1>Page not found</h1>')
 
@@ -38,10 +40,9 @@ class TaskCrud(LoginRequiredMixin, TemplateView):
         return request.user
 
     def _get_request_method(self, kwargs):
-        valid_methods = ['create', 'edit', 'delete', 'done', 'undone']
         method = kwargs.get('method', '')
-        if method not in valid_methods:
-            raise HttpResponseBadRequest
+        if method not in self.valid_methods:
+            raise Http404
         return method
 
     def _get_edited_task(self, request) -> Task:
@@ -49,7 +50,7 @@ class TaskCrud(LoginRequiredMixin, TemplateView):
         try:
             return Task.objects.get(id=task_id)
         except ObjectDoesNotExist:
-            raise HttpResponseNotFound
+            raise Http404
 
     def _get_task_id(self, request) -> int:
         if 'task_id' in request.POST:
